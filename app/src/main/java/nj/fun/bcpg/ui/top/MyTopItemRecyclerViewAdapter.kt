@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 
-import nj.`fun`.bcpg.ui.top.TopItemFragment.OnListFragmentInteractionListener
+import nj.`fun`.bcpg.ui.top.TopItemFragment.OnTopListFragmentInteractionListener
 import nj.`fun`.bcpg.dt.VMList.VMItem
 
 import kotlinx.android.synthetic.main.fragment_top_item.view.*
@@ -16,7 +16,7 @@ import nj.`fun`.bcpg.R
 
 class MyTopItemRecyclerViewAdapter(
         private val mValues: List<VMItem>,
-        private val mListener: OnListFragmentInteractionListener?)
+        private val mListener: OnTopListFragmentInteractionListener?)
     : RecyclerView.Adapter<MyTopItemRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener

@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import nj.`fun`.bcpg.ContainerActivity
 import nj.`fun`.bcpg.R
 
 import nj.`fun`.bcpg.dt.VMList
@@ -16,7 +19,14 @@ import nj.`fun`.bcpg.dt.VMList.VMItem
 class TopItemFragment : Fragment() {
 
 
-    private var listener: OnListFragmentInteractionListener? = null
+    private var listenerTop: OnTopListFragmentInteractionListener? = object : OnTopListFragmentInteractionListener {
+        override fun onListFragmentInteraction(item: VMItem?) {
+            item ?: return
+
+            Toast.makeText(context, "ID: " + item.id, Toast.LENGTH_SHORT).show()
+            ContainerActivity.launch(activity as AppCompatActivity, item.id)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +41,7 @@ class TopItemFragment : Fragment() {
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                adapter = MyTopItemRecyclerViewAdapter(VMList.ITEMS, listener)
+                adapter = MyTopItemRecyclerViewAdapter(VMList.ITEMS, listenerTop)
             }
         }
         return view
@@ -39,20 +49,20 @@ class TopItemFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-//        if (context is OnListFragmentInteractionListener) {
-//            listener = context
+//        if (context is OnTopListFragmentInteractionListener) {
+//            listenerTop = context
 //        } else {
-//            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+//            throw RuntimeException(context.toString() + " must implement OnTopListFragmentInteractionListener")
 //        }
     }
 
     override fun onDetach() {
         super.onDetach()
-        listener = null
+        listenerTop = null
     }
 
 
-    interface OnListFragmentInteractionListener {
+    interface OnTopListFragmentInteractionListener {
         fun onListFragmentInteraction(item: VMItem?)
     }
 
