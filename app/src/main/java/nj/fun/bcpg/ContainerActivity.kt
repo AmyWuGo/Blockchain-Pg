@@ -18,7 +18,7 @@ class ContainerActivity : AppCompatActivity(), ContainerFragment1.OnContainerFra
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, ContainerFragment1.newInstance(
-                            intent.getIntExtra(VMList.KEY_VIEW_MODEL_INDEX, VMList.VM0001_DEFAULT)))
+                            intent.getIntExtra(VMList.KEY_VIEW_MODEL_INDEX, VMList.VM_DEFAULT)))
                     .commitNow()
         }
     }
@@ -26,7 +26,7 @@ class ContainerActivity : AppCompatActivity(), ContainerFragment1.OnContainerFra
     companion object {
 
         @JvmStatic
-        fun launch(from: AppCompatActivity, viewModelIndex: Int = VMList.VM0001_DEFAULT) {
+        fun launch(from: AppCompatActivity, viewModelIndex: Int = VMList.VM_DEFAULT) {
             from.startActivity(Intent(from, ContainerActivity::class.java)
                     .apply {
                         putExtra(VMList.KEY_VIEW_MODEL_INDEX, viewModelIndex)

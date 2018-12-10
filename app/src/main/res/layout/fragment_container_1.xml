@@ -35,12 +35,15 @@
 
     <TextView
         android:id="@+id/output_txt"
+        android:scrollbars = "vertical"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#a0e1f7"
         android:layout_marginBottom="16dp"
-        android:padding="4dp"
-        android:text="logs will be here"
-        android:textSize="18sp"
+        android:padding="16dp"
+        android:hint="Logs will show up here."
+        android:gravity="bottom"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/action_2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

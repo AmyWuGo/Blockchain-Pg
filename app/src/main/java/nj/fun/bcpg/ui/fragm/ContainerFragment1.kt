@@ -3,6 +3,7 @@ package nj.`fun`.bcpg.ui.fragm
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +14,10 @@ import kotlinx.android.synthetic.main.fragment_container_1.*
 import nj.`fun`.bcpg.R
 import nj.`fun`.bcpg.base.BaseViewModel
 import nj.`fun`.bcpg.dt.VMList
-import nj.`fun`.bcpg.dt.VMList.VM0001_DEFAULT
-import nj.`fun`.bcpg.vms.ViewModel0001
+import nj.`fun`.bcpg.dt.VMList.VM_100
+import nj.`fun`.bcpg.dt.VMList.VM_DEFAULT
+import nj.`fun`.bcpg.vms.ViewModel100
+import nj.`fun`.bcpg.vms.ViewModelDefault
 
 
 class ContainerFragment1 : Fragment() {
@@ -27,7 +30,7 @@ class ContainerFragment1 : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            viewModelIndex = it.getInt(VMList.KEY_VIEW_MODEL_INDEX, VM0001_DEFAULT)
+            viewModelIndex = it.getInt(VMList.KEY_VIEW_MODEL_INDEX, VM_DEFAULT)
         }
     }
 
@@ -57,6 +60,7 @@ class ContainerFragment1 : Fragment() {
     }
 
     private fun initVies() {
+        output_txt.movementMethod = ScrollingMovementMethod();
         action_1.setOnClickListener { viewModel.onAction_1_Clicked() }
         action_2.setOnClickListener { viewModel.onAction_2_Clicked() }
         action_3.setOnClickListener { viewModel.onAction_3_Clicked() }
@@ -65,10 +69,10 @@ class ContainerFragment1 : Fragment() {
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this).get(
                 when (viewModelIndex) {
-                    VM0001_DEFAULT -> ViewModel0001::class.java
-                    else -> ViewModel0001::class.java
+                    VM_DEFAULT -> ViewModelDefault::class.java
+                    VM_100 -> ViewModel100::class.java
+                    else -> ViewModelDefault::class.java
                 }
-
         )
 
         viewModel.outputMessage.observe(this, Observer<String> { outputMsg ->
@@ -91,7 +95,7 @@ class ContainerFragment1 : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(viewModelIndex: Int = VM0001_DEFAULT) =
+        fun newInstance(viewModelIndex: Int = VM_DEFAULT) =
                 ContainerFragment1().apply {
                     arguments = Bundle().apply {
                         putInt(VMList.KEY_VIEW_MODEL_INDEX, viewModelIndex)
