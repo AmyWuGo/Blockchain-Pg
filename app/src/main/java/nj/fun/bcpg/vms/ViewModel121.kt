@@ -6,9 +6,7 @@ import io.bumo.encryption.key.PublicKey
 import nj.`fun`.bcpg.base.BaseViewModel
 import io.bumo.encryption.model.KeyType
 import java.util.*
-import android.R.attr.src
-
-
+import org.spongycastle.util.encoders.Hex
 
 
 class ViewModel121(appContext: Application) : BaseViewModel(appContext) {
@@ -62,6 +60,30 @@ class ViewModel121(appContext: Application) : BaseViewModel(appContext) {
     }
 
     override fun onAction_3_Clicked() {
-        outputMessage.value = "3"
+
+        val key = PrivateKey("privxxxx")
+
+        output = "rawPrivateKey: " + Arrays.toString(key.rawPrivateKey) + "\n\n" +
+                "encPrivateKey: " + key.encPrivateKey + "\n\n" +
+                "encPublicKey: " + key.encPublicKey + "\n\n" +
+                "encAddress: " + key.encAddress + "\n\n\n"
+        printLogs(output)
+
+
+        val src = "0aww"
+        val sign = key.sign(src.toByteArray())
+        val signString = Hex.toHexString( sign )
+
+        output = "sign: " + Arrays.toString(sign) + "\n"
+        printLogs(output)
+
+        output = "sign: $signString\n"
+        printLogs(output)
+
+
+        val publicKey = PublicKey("b0018c810ae20cf22781c851c3ca74edec83148128effdea96c7a1b245dc6382df3d3783d384")
+        val verifyResult = publicKey.verify(src.toByteArray(), sign)
+        output = "verifyResult: $verifyResult\n\n"
+        printLogs(output)
     }
 }
