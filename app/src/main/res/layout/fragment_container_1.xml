@@ -40,6 +40,8 @@
         android:layout_height="0dp"
         android:background="#a0e1f7"
         android:layout_marginBottom="16dp"
+        android:textIsSelectable="true"
+        android:longClickable="true"
         android:padding="16dp"
         android:hint="Logs will show up here."
         android:gravity="bottom"

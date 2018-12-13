@@ -15,8 +15,10 @@ import nj.`fun`.bcpg.R
 import nj.`fun`.bcpg.base.BaseViewModel
 import nj.`fun`.bcpg.dt.VMList
 import nj.`fun`.bcpg.dt.VMList.VM_100
+import nj.`fun`.bcpg.dt.VMList.VM_121
 import nj.`fun`.bcpg.dt.VMList.VM_DEFAULT
 import nj.`fun`.bcpg.vms.ViewModel100
+import nj.`fun`.bcpg.vms.ViewModel121
 import nj.`fun`.bcpg.vms.ViewModelDefault
 
 
@@ -71,6 +73,7 @@ class ContainerFragment1 : Fragment() {
                 when (viewModelIndex) {
                     VM_DEFAULT -> ViewModelDefault::class.java
                     VM_100 -> ViewModel100::class.java
+                    VM_121 -> ViewModel121::class.java
                     else -> ViewModelDefault::class.java
                 }
         )
