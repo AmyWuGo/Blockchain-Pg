@@ -1,89 +1,112 @@
 package nj.`fun`.bcpg.vms
 
 import android.app.Application
-import io.bumo.encryption.key.PrivateKey
-import io.bumo.encryption.key.PublicKey
+import io.rexx.crypto.Keypair
+import io.rexx.model.request.AccountCheckValidRequest
+import io.rexx.model.request.AccountGetInfoRequest
+import io.rexx.model.request.AccountGetNonceRequest
 import nj.`fun`.bcpg.base.BaseViewModel
-import io.bumo.encryption.model.KeyType
-import java.util.*
-import org.spongycastle.util.encoders.Hex
+import kotlin.concurrent.thread
 
 
 class ViewModel121(appContext: Application) : BaseViewModel(appContext) {
-    //rawPrivateKey: [25, 51, -9, 52, -4, -83, -114, -3, 2, 77, 47, -89, 112, -40, -100, -87, -103, 99, 54, 23, 82, 74, 106, 40, 3, -79, 77, 82, 90, 42, -58, 60]
-
-    val encPrivateKey = "privbsWi7woYzw53N7Dmyhd3mpvKFRWxP8aGo8mygBGkenvh3br3cLXN"
-    val encPublicKey = "b001396e8788d402e8c1f8012f996e5783e123b453613c6b3487f0e18360c73d9f27807d4dba"
-    val encAddress = "buQkFni6XKxkGEdjBG4URcTxk53Rjf2rgeF2"
-
-
+    /**
+     * Generate new key pair and validate addresses.
+     */
     override fun onAction_1_Clicked() {
-        msg = "Generated a BUMO  ED25519 keyPair"
-        showToast(msg)
+        thread(start = true) {
 
-        val key = PrivateKey(KeyType.ED25519)
+            val keypair = Keypair.generator()
+            msg =
+                    " keypair.getPrivateKey() " + keypair.privateKey + "\n" +
+                    " keypair.getPublicKey() " + keypair.publicKey + "\n" +
+                    " keypair.getAddress() " + keypair.address + "\n"
 
-        output = "rawPrivateKey: " + Arrays.toString(key.rawPrivateKey) + "\n\n" +
-                "encPrivateKey: " + key.encPrivateKey + "\n\n" +
-                "encPublicKey: " + key.encPublicKey + "\n\n" +
-                "encAddress: " + key.encAddress + "\n\n\n"
+            printLogs(msg)
+            printLogs("start validating address:" + "\n")
 
-        outputMessage.value = output
+            Thread.sleep(300)
+            checkAccountAddress(keypair.address)
 
+            addressList4Test.forEach {
+                Thread.sleep(400)
 
-        printLogs(msg)
-        printLogs(output)
+                checkAccountAddress(it)
+            }
+        }
     }
 
+    /**
+     * getInfo
+     */
     override fun onAction_2_Clicked() {
+        thread(start = true) {
+            check_getInfo(Keypair.generator().address)
 
-        val key = PrivateKey(encPrivateKey)
-
-        output = "rawPrivateKey: " + Arrays.toString(key.rawPrivateKey) + "\n\n" +
-                "encPrivateKey: " + key.encPrivateKey + "\n\n" +
-                "encPublicKey: " + key.encPublicKey + "\n\n" +
-                "encAddress: " + key.encAddress + "\n\n\n"
-        printLogs(output)
-
-
-        val src = "test"
-        val sign = key.sign(src.toByteArray())
-
-        output = "sign: " + Arrays.toString(sign) + "\n\n"
-        printLogs(output)
-
-
-        val publicKey = PublicKey(encPublicKey)
-        val verifyResult = publicKey.verify(src.toByteArray(), sign)
-        output = "verifyResult: $verifyResult\n\n"
-        printLogs(output)
+            addressList4Test.forEach {
+                Thread.sleep(400)
+                check_getInfo(it)
+            }
+        }
     }
 
+
+    /**
+     * getNonce
+     */
     override fun onAction_3_Clicked() {
 
-        val key = PrivateKey("privxxxx")
+        thread(start = true) {
+            check_getNonce(Keypair.generator().address)
 
-        output = "rawPrivateKey: " + Arrays.toString(key.rawPrivateKey) + "\n\n" +
-                "encPrivateKey: " + key.encPrivateKey + "\n\n" +
-                "encPublicKey: " + key.encPublicKey + "\n\n" +
-                "encAddress: " + key.encAddress + "\n\n\n"
-        printLogs(output)
+            addressList4Test.forEach {
+                Thread.sleep(400)
+                check_getNonce(it)
+            }
+        }
 
-
-        val src = "0aww"
-        val sign = key.sign(src.toByteArray())
-        val signString = Hex.toHexString( sign )
-
-        output = "sign: " + Arrays.toString(sign) + "\n"
-        printLogs(output)
-
-        output = "sign: $signString\n"
-        printLogs(output)
+    }
 
 
-        val publicKey = PublicKey("b0018c810ae20cf22781c851c3ca74edec83148128effdea96c7a1b245dc6382df3d3783d384")
-        val verifyResult = publicKey.verify(src.toByteArray(), sign)
-        output = "verifyResult: $verifyResult\n\n"
-        printLogs(output)
+    private fun check_getNonce(targetAddress: String) {
+
+        val getNonceRequest = AccountGetNonceRequest()
+        getNonceRequest.address = targetAddress
+
+        val getNonceResponse = sdk.accountService.getNonce(getNonceRequest)
+        if (getNonceResponse.errorCode == 0) {
+            val result = getNonceResponse.result
+            printLogs("nonce: " + result.nonce!!)
+        } else {
+            printLogs("error" + getNonceResponse.errorDesc)
+        }
+
+    }
+
+    private fun check_getInfo(targetAddress: String) {
+
+        val request = AccountGetInfoRequest()
+        request.address = targetAddress
+
+        val response = sdk.accountService.getInfo(request)
+        if (response.errorCode == 0) {
+            printLogs(response.result.toString())
+        } else {
+            printLogs("error: " + response.errorDesc)
+        }
+    }
+
+
+    private fun checkAccountAddress(targetAddress: String) {
+
+        val request = AccountCheckValidRequest()
+        request.address = targetAddress
+
+        val response = sdk.getAccountService().checkValid(request)
+        if (0 == response.getErrorCode()) {
+            printLogs("response:" + response.getResult().isValid())
+        } else {
+            printLogs("error: " + response.errorDesc)
+        }
     }
 }

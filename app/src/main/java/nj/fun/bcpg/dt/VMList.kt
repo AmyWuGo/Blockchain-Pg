@@ -1,6 +1,5 @@
 package nj.`fun`.bcpg.dt
 
-import nj.`fun`.bcpg.vms.ViewModelDefault
 
 
 object  VMList {
@@ -11,12 +10,14 @@ object  VMList {
     const val VM_DEFAULT = 1
     const val VM_100 = 100
     const val VM_121 = 121
+    const val VM_122 = 122
 
 
     val ITEMS: MutableList<VMItem> = arrayListOf(
-            VMItem(VM_DEFAULT, "Default"),
-            VMItem(VM_100, "Generate Bitcoin Address 1"),
-            VMItem(VM_121, "Bubi Encryption 1")
+//            VMItem(VM_DEFAULT, "Default"),
+//            VMItem(VM_100, "Generate Bitcoin Address 1"),
+            VMItem(VM_121, "Rexx SDK account test 1"),
+            VMItem(VM_122, "Rexx SDK account test 2")
     )
 
 }

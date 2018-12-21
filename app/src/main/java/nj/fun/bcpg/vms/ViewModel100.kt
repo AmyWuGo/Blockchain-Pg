@@ -19,7 +19,7 @@ class ViewModel100(appContext: Application) : BaseViewModel(appContext) {
         val key = ECKey()
         address = key.toAddress(networkParameters).toString()
 
-        output = "private key => " + key.privateKeyAsHex + "\n" +
+        var output = "private key => " + key.privateKeyAsHex + "\n" +
                 "public key => " + key.publicKeyAsHex + "\n" +
                 "address => " + address + "\n"
         outputMessage.value = output
